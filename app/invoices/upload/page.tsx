@@ -76,9 +76,7 @@ export default function UploadPage() {
 
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
         const newFiles = Array.from(e.dataTransfer.files)
-          .filter(
-            (file) => file.type === "application/pdf" || file.type.startsWith("image/")
-          )
+          .filter((file) => file.type.startsWith("image/"))
           .map((file) => renameFileWithShortId(file));
         setFiles((prev) => [...prev, ...newFiles]);
       }
@@ -89,9 +87,7 @@ export default function UploadPage() {
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files)
-        .filter(
-          (file) => file.type === "application/pdf" || file.type.startsWith("image/")
-        )
+        .filter((file) => file.type.startsWith("image/"))
         .map((file) => renameFileWithShortId(file));
       setFiles((prev) => [...prev, ...newFiles]);
     }
@@ -142,7 +138,7 @@ export default function UploadPage() {
       <div>
         <h1 className="text-3xl font-bold">Upload Invoices</h1>
         <p className="text-muted-foreground mt-1">
-          Upload PDF or image files to extract invoice data automatically
+          Upload image files to extract invoice data automatically
         </p>
       </div>
 
@@ -150,7 +146,7 @@ export default function UploadPage() {
         <CardHeader>
           <CardTitle>Drag & Drop Files</CardTitle>
           <CardDescription>
-            Support PDF, PNG, JPG, JPEG files. You can upload multiple files at once.
+            Support PNG, JPG, JPEG, GIF, WEBP files. You can upload multiple files at once.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -174,7 +170,7 @@ export default function UploadPage() {
               ref={fileInputRef}
               type="file"
               multiple
-              accept=".pdf,.png,.jpg,.jpeg"
+              accept=".png,.jpg,.jpeg,.gif,.webp"
               onChange={handleFileInput}
               className="hidden"
             />
