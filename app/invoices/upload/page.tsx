@@ -9,6 +9,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Upload, X, FileText, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+function generateShortId(): string {
+  return crypto.randomUUID().replace(/-/g, "").substring(0, 8);
+}
+
+function renameFileWithShortId(file: File): File {
+  const shortId = generateShortId();
+  const extension = file.name.split(".").pop();
+  const nameWithoutExt = file.name.substring(0, file.name.lastIndexOf("."));
+  const newName = `${nameWithoutExt}_${shortId}.${extension}`;
+  
+  return new File([file], newName, {
+    type: file.type,
+    lastModified: file.lastModified,
+  });
+}
+
 export default function UploadPage() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -46,9 +62,11 @@ export default function UploadPage() {
       setDragActive(false);
 
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        const newFiles = Array.from(e.dataTransfer.files).filter(
-          (file) => file.type === "application/pdf" || file.type.startsWith("image/")
-        );
+        const newFiles = Array.from(e.dataTransfer.files)
+          .filter(
+            (file) => file.type === "application/pdf" || file.type.startsWith("image/")
+          )
+          .map((file) => renameFileWithShortId(file));
         setFiles((prev) => [...prev, ...newFiles]);
       }
     },
@@ -57,9 +75,11 @@ export default function UploadPage() {
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const newFiles = Array.from(e.target.files).filter(
-        (file) => file.type === "application/pdf" || file.type.startsWith("image/")
-      );
+      const newFiles = Array.from(e.target.files)
+        .filter(
+          (file) => file.type === "application/pdf" || file.type.startsWith("image/")
+        )
+        .map((file) => renameFileWithShortId(file));
       setFiles((prev) => [...prev, ...newFiles]);
     }
   };
