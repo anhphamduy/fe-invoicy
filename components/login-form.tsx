@@ -38,8 +38,8 @@ export function LoginForm({
         password,
       });
       if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/protected");
+      router.refresh();
+      router.push("/invoices");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
@@ -51,9 +51,9 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Sign In</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your credentials to access your account
           </CardDescription>
         </CardHeader>
         <CardContent>
