@@ -10,7 +10,20 @@ import { Upload, X, FileText, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 function generateShortId(): string {
-  return crypto.randomUUID().replace(/-/g, "").substring(0, 8);
+  if (typeof window !== "undefined" && window.crypto && window.crypto.randomUUID) {
+    return window.crypto.randomUUID().replace(/-/g, "").substring(0, 8);
+  }
+  const array = new Uint8Array(8);
+  if (typeof window !== "undefined" && window.crypto) {
+    window.crypto.getRandomValues(array);
+  } else {
+    for (let i = 0; i < 8; i++) {
+      array[i] = Math.floor(Math.random() * 256);
+    }
+  }
+  return Array.from(array)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 function renameFileWithShortId(file: File): File {
